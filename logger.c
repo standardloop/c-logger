@@ -63,7 +63,7 @@ void Log(enum LogLevel level, char *message)
     switch (level)
     {
     case FATAL:
-        if (strlen(message) == 0)
+        if (message == NULL)
         {
             printf("[FATAL]: crash on purpose\n");
         }
