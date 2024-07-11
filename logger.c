@@ -89,27 +89,27 @@ void Log(enum LogLevel level, char *message)
     case FATAL:
         if (message == NULL)
         {
-            printf("[FATAL]: crash on purpose\n");
+            printf("{\"level\": \"ERROR\", \"message\": \"crash on purpose\"}\n");
         }
         else
         {
-            printf("[FATAL]: %s", message);
+            printf("{\"level\": \"FATAL\", \"message\": \"%s\"}\n", message);
         }
         exit(EXIT_FAILURE);
     case ERROR:
-        printf("[ERROR]: %s\n", message);
+        printf("{\"level\": \"ERROR\", \"message\": \"%s\"}\n", message);
         break;
     case WARN:
-        printf("[WARN]: %s\n", message);
+        printf("{\"level\": \"WARN\", \"message\": \"%s\"}\n", message);
         break;
     case DEBUG:
-        printf("[DEBUG]: %s\n", message);
+        printf("{\"level\": \"DEBUG\", \"message\": \"%s\"}\n", message);
         break;
     case INFO:
-        printf("[INFO]: %s\n", message);
+        printf("{\"level\": \"INFO\", \"message\": \"%s\"}\n", message);
         break;
     case TRACE:
-        printf("[TRACE]: %s\n", message);
+        printf("{\"level\": \"TRACE\", \"message\": \"%s\"}\n", message);
         break;
     }
     if (true)

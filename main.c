@@ -5,8 +5,8 @@
 
 int main(void)
 {
-    SetLogLevel(StringToLogLevel("DEBUG"));
+    SetLogLevel(StringToLogLevel("TRACE"));
     Log(TRACE, "hello");
-    printf("%s\n", LogLevelToString(GetLogLevel()));
+    //printf("%s\n", LogLevelToString(GetLogLevel()));
     return EXIT_SUCCESS;
 }
