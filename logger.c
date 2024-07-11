@@ -47,6 +47,29 @@ enum LogLevel GetLogLevel()
     return log_level;
 }
 
+char *LogLevelToString(enum LogLevel level)
+{
+    switch (level)
+    {
+
+    case FATAL:
+        return "FATAL";
+    case ERROR:
+        return "ERROR";
+    case WARN:
+        return "WARN";
+    case DEBUG:
+        return "DEBUG";
+    case INFO:
+        return "INFO";
+    case TRACE:
+        return "TRACE";
+    default:
+        return NULL;
+    }
+    return NULL;
+}
+
 void Log(enum LogLevel level, char *message)
 {
     // FIXMELog configuration
