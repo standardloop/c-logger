@@ -89,7 +89,7 @@ void Log(enum LogLevel level, char *message)
     case FATAL:
         if (message == NULL)
         {
-            printf("{\"level\": \"ERROR\", \"message\": \"crash on purpose\"}\n");
+            printf("{\"level\": \"FATAL\", \"message\": \"crash on purpose\"}\n");
         }
         else
         {
