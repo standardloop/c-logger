@@ -11,24 +11,30 @@ jobs:
       contents: write
     env:
       DYLIB_NAME: "libstandardloop-logger.dylib"
+      DYLIB_ZIP: "${DYLIB_NAME}.zip"
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: echo vars
+        run: |
+          echo ${DYLIB_NAME}
+          echo ${DYLIB_ZIP}
+s
       - name: Build the dylib
         run: |
           make build_release
 
       - name: Archive dylib
         run: |
-          zip ${DYLIB_NAME}.zip ${DYLIB_NAME}
+          zip ${DYLIB_ZIP} ${DYLIB_NAME}
 
       - name: Create dylib Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ${DYLIB_NAME}.zip
+          files: ${DYLIB_ZIP}
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -38,5 +44,5 @@ jobs:
       - name: Upload dylib as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${DYLIB_NAME}
-          path: ${DYLIB_NAME}
+          name: ${DYLIB_ZIP}
+          path: ${DYLIB_ZIP}
