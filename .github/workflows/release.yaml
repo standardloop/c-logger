@@ -9,6 +9,8 @@ jobs:
     runs-on: macos-latest
     permissions:
       contents: write
+    env:
+      DYLIB_NAME: "libstandardloop-logger.dylib"
 
     steps:
       - name: Checkout repository
@@ -20,15 +22,21 @@ jobs:
 
       - name: Archive dylib
         run: |
-          zip libstandardloop-logger.dylib.zip libstandardloop-logger.dylib
+          zip ${DYLIB_NAME}.zip ${DYLIB_NAME}
 
-      - name: Create Release
+      - name: Create dylib Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: libstandardloop-logger.dylib.zip
+          files: ${DYLIB_NAME}.zip
           draft: false
           prerelease: false
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload dylib as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${DYLIB_NAME}
+          path: ${DYLIB_NAME}
