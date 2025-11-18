@@ -11,7 +11,7 @@ jobs:
       contents: write
     env:
       DYLIB_NAME: "libstandardloop-logger.dylib"
-      DYLIB_ZIP: "${DYLIB_NAME}.zip"
+      DYLIB_ZIP: "libstandardloop-logger.dylib.zip"
 
     steps:
       - name: Checkout repository
