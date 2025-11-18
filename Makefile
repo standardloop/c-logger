@@ -21,7 +21,7 @@ check_leaks:
 
 release_local: build_release move_files
 
-release_local_github: download_release move_files
+# release_local_github: download_release move_files
 
 build_release:
 	@$(CC) \
@@ -35,6 +35,6 @@ move_files:
 	@sudo mv $(DYLIB_NAME) $(DYLIB_PATH)
 	@sudo cp logger.h $(DYLIB_INCLUDE_PATH)
 
-download_release:
-	curl -O -J -L https://github.com/standardloop/c-logger/releases/download/v$(RELEASE_VERSION)/$(DYLIB_NAME).zip
-	unzip $(DYLIB_NAME).zip
+# download_release:
+# 	curl -O -J -L https://github.com/standardloop/c-logger/releases/download/v$(RELEASE_VERSION)/$(DYLIB_NAME).zip
+# 	unzip $(DYLIB_NAME).zip
