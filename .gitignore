@@ -57,3 +57,4 @@ main
 .vscode
 lab
 lab.c
+*.zip
