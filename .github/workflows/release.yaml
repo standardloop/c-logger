@@ -5,8 +5,10 @@ on:
     types: [published]
 
 jobs:
-  build-dylib:
+  release-dylib:
     runs-on: macos-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
