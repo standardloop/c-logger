@@ -3,7 +3,9 @@ include Makefile.properties
 all: build run
 
 clean:
-	@rm $(EXECUTABLE_NAME)
+	@rm -f $(EXECUTABLE_NAME)
+	@rm -f $(DYLIB_NAME)
+	@rm -f $(DYLIB_NAME).zip
 
 build:
 	@$(CC) $(CC_FLAGS) \
@@ -17,7 +19,9 @@ run:
 check_leaks:
 	@leaks --atExit -- ./$(EXECUTABLE_NAME)
 
-release: build_release move_files
+release_local: build_release move_files
+
+release_local_github: download_release move_files
 
 build_release:
 	@$(CC) \
@@ -30,3 +34,7 @@ build_release:
 move_files:
 	@sudo mv $(DYLIB_NAME) $(DYLIB_PATH)
 	@sudo cp logger.h $(DYLIB_INCLUDE_PATH)
+
+download_release:
+	curl -O -J -L https://github.com/standardloop/c-logger/releases/download/v$(RELEASE_VERSION)/$(DYLIB_NAME).zip
+	unzip $(DYLIB_NAME).zip
