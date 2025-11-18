@@ -24,7 +24,7 @@ build_release:
 	$(SOURCE_FILES) \
 	-O3 \
 	-dynamiclib \
-	-current_version 1.0.0 \
+	-current_version $(RELEASE_VERSION) \
 	-o $(DYLIB_NAME)
 
 move_files:
