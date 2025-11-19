@@ -21,10 +21,10 @@ check_leaks:
 
 release_local: build_release move_files
 
-# release_local_github: download_release move_files
+release_local_github: download_release move_files
 
 build_release:
-	@$(CC) \
+	@$(CC) $(CC_FLAGS) \
 	$(SOURCE_FILES) \
 	-O3 \
 	-dynamiclib \
@@ -35,6 +35,19 @@ move_files:
 	@sudo mv $(DYLIB_NAME) $(DYLIB_PATH)
 	@sudo cp logger.h $(DYLIB_INCLUDE_PATH)
 
-# download_release:
-# 	curl -O -J -L https://github.com/standardloop/c-logger/releases/download/v$(RELEASE_VERSION)/$(DYLIB_NAME).zip
-# 	unzip $(DYLIB_NAME).zip
+
+# local testing
+download_release:
+	mkdir -p tmp && \
+	cd tmp && \
+	curl -O -J -L https://github.com/standardloop/c-logger/releases/download/v0.0.1/libstandardloop-logger.zip && \
+	unzip libstandardloop-logger.zip && \
+	sudo mv libstandardloop-logger.dylib /usr/local/lib/standardloop/ && \
+	sudo mv logger.h /usr/local/include/standardloop/ && rm libstandardloop-logger.zip
+
+lab:
+	@$(CC) $(CC_FLAGS) \
+	lab.c \
+	-L/usr/local/lib/standardloop \
+	-lstandardloop-logger \
+	-o lab

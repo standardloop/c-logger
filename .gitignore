@@ -56,5 +56,6 @@ dkms.conf
 main
 .vscode
 lab
-lab.c
 *.zip
+tmp/
+logger
