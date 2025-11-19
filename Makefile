@@ -45,9 +45,17 @@ download_release:
 	sudo mv libstandardloop-logger.dylib /usr/local/lib/standardloop/ && \
 	sudo mv logger.h /usr/local/include/standardloop/ && rm libstandardloop-logger.zip
 
-lab:
+.PHONY: lab FORCE
+
+lab: FORCE
 	@$(CC) $(CC_FLAGS) \
 	lab.c \
 	-L/usr/local/lib/standardloop \
 	-lstandardloop-logger \
 	-o lab
+
+FORCE:
+
+clean_release:
+	sudo rm /usr/local/lib/standardloop/libstandardloop-logger.dylib
+	sudo rm /usr/local/include/standardloop/logger.h
