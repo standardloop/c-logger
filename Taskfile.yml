@@ -48,17 +48,25 @@ tasks:
       - sudo rm -f {{.DYLIB_INCLUDE_PATH}}/logger.h
     
   # local test
-  release:download:
+  remote:download:
+    run: once
     cmds:
       - |
-        sudo -v
         mkdir -p tmp
         cd tmp
         curl -O -J -L https://github.com/standardloop/c-logger/releases/download/v{{.RELEASE_VERSION}}/libstandardloop-logger.zip
         unzip libstandardloop-logger.zip
-        sudo mv {{.DYLIB_NAME}} {{.DYLIB_PATH}}
-        sudo mv logger.h {{.DYLIB_INCLUDE_PATH}} 
         rm libstandardloop-logger.zip
+
+  remote:move:
+    deps:
+      - remote:download
+    cmds:
+      - |
+        cd tmp/
+        sudo -v
+        sudo mv {{.DYLIB_NAME}} {{.DYLIB_PATH}}
+        sudo mv logger.h {{.DYLIB_INCLUDE_PATH}}
 
   lab:
     deps:
@@ -71,6 +79,8 @@ tasks:
         {{.CC}} {{.CC_FLAGS}} \
         lab.c \
         {{range .SOURCE_FILES}} {{.}} {{end}} \
+        -L/usr/local/lib/standardloop \
+        -lstandardloop-logger \
         -o {{.LAB_EXECUTABLE_NAME}}
     sources:
       - ./lab.c

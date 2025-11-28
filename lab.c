@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// #include <standardloop/logger.h>
-#include "logger.h"
+#include <standardloop/logger.h>
+// #include "logger.h"
 
 int main(void)
 {
