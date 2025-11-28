@@ -18,7 +18,13 @@ tasks:
     deps:
       - lab
 
+  release:
+    deps:
+      - release:build
+      - release:move-files
+
   release:build:
+    run: once
     cmds:
       - |
         {{.CC}} {{.CC_FLAGS}} \

@@ -8,7 +8,7 @@ int main(void)
 {
     InitLoggerEasy(StringToLogLevel("TRACE"));
     // SetLogLevel(StringToLogLevel("TRACE"));
-    Log(TRACE, "hello %d", 10);
+    Log(TRACE, "hello %s", "world");
     // printf("%s\n", LogLevelToString(GetLogLevel()));
     return EXIT_SUCCESS;
 }

@@ -2,30 +2,31 @@
 
 Simple C logging package created from scratch for educational purposes
 
+## Disclaimer
+
+The taskfile is currently only configured for macOS
+
 ## Usage
 
 ### Setup
 
 ```sh
-$ make release
+$ task release
 ```
 
 ### Example Program
 
 #### Source
 ```C
+#include <stdlib.h>
+#include <stdio.h>
+
 #include <standardloop/logger.h>
 
 int main(void)
 {
-    SetLogLevel(StringToLogLevel("TRACE"));
-    Log(TRACE, "hello");
-    return 0;
+    InitLoggerEasy(StringToLogLevel("TRACE"));
+    Log(TRACE, "hello %s", "world");
+    return EXIT_SUCCESS;
 }
-```
-
-#### Compile
-
-```sh
-$ gcc main.c -L/usr/local/lib/standardloop -lstandardloop-logger
 ```
