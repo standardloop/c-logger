@@ -2,10 +2,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
+#include <stdarg.h>
+#include <time.h>
 
 #include "logger.h"
 
-static enum LogLevel log_level = FATAL;
+static Logger logger = {FATAL, JSON, true, true};
+
+void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush)
+{
+    SetLogLevel(level);
+    logger.log_type = type;
+    logger.timestamp = timestamp;
+    logger.flush = flush;
+}
+
+void InitLoggerEasy(enum LogLevel level)
+{
+    InitLogger(level, JSON, true, true);
+}
 
 enum LogLevel StringToLogLevel(const char *input_str)
 {
@@ -39,12 +55,12 @@ enum LogLevel StringToLogLevel(const char *input_str)
 
 void SetLogLevel(enum LogLevel level)
 {
-    log_level = level;
+    logger.log_level = level;
 }
 
 enum LogLevel GetLogLevel()
 {
-    return log_level;
+    return logger.log_level;
 }
 
 char *LogLevelToString(enum LogLevel level)
@@ -70,17 +86,14 @@ char *LogLevelToString(enum LogLevel level)
     return NULL;
 }
 
-void Log(enum LogLevel level, char *message)
+void Log(enum LogLevel level, const char *message, ...)
 {
     // FIXMELog configuration
     // char buff[1024];
     // memset(buff, '\0', sizeof(buff));
     // setvbuf(stdout, buff, _IOFBF, 1024);
 
-    // FIXMEhave time as well
-    // (int)time(NULL);
-    // FIXMEallow configuration such as JSON logs etc
-    if (level > log_level)
+    if (level > logger.log_level)
     {
         return;
     }
@@ -89,32 +102,51 @@ void Log(enum LogLevel level, char *message)
     case FATAL:
         if (message == NULL)
         {
-            printf("{\"level\": \"FATAL\", \"message\": \"crash on purpose\"}\n");
+            fprintf(stderr, "{\"level\": \"FATAL\", \"message\": \"crash on purpose\"}\n");
         }
         else
         {
-            printf("{\"level\": \"FATAL\", \"message\": \"%s\"}\n", message);
+            fprintf(stderr, "{\"level\": \"FATAL\", ");
         }
         exit(EXIT_FAILURE);
     case ERROR:
-        printf("{\"level\": \"ERROR\", \"message\": \"%s\"}\n", message);
+        fprintf(stderr, "{\"level\": \"ERROR\", ");
         break;
     case WARN:
-        printf("{\"level\": \"WARN\", \"message\": \"%s\"}\n", message);
+        fprintf(stderr, "{\"level\": \"WARN\", ");
         break;
     case DEBUG:
-        printf("{\"level\": \"DEBUG\", \"message\": \"%s\"}\n", message);
+        fprintf(stderr, "{\"level\": \"DEBUG\", ");
         break;
     case INFO:
-        printf("{\"level\": \"INFO\", \"message\": \"%s\"}\n", message);
+        fprintf(stderr, "{\"level\": \"INFO\", ");
         break;
     case TRACE:
-        printf("{\"level\": \"TRACE\", \"message\": \"%s\"}\n", message);
+        fprintf(stderr, "{\"level\": \"TRACE\", ");
         break;
     }
-    if (true)
+
+    if (logger.timestamp)
     {
-        // temporary
-        fflush(stdout);
+        time_t rawtime;
+        struct tm *time_info;
+        char timestamp[80];
+
+        time(&rawtime);
+        time_info = localtime(&rawtime);
+        strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", time_info);
+        fprintf(stderr, "\"timestamp\": \"%s\", ", timestamp);
+    }
+
+    fprintf(stderr, "\"message\": \"");
+    va_list args;
+    va_start(args, message);
+    vfprintf(stderr, message, args);
+    va_end(args);
+    fprintf(stderr, "\"}\n");
+
+    if (logger.flush)
+    {
+        fflush(stderr);
     }
 }

@@ -1,0 +1,84 @@
+---
+version: '3'
+
+vars:
+  CC: gcc
+  CC_FLAGS: "-Werror -Wextra -Wall -Wfree-nonheap-object -std=c17"
+  LAB_EXECUTABLE_NAME: lab
+  SOURCE_FILES:
+    - logger.c
+  DYLIB_NAME: libstandardloop-logger.dylib
+  DYLIB_PATH: /usr/local/lib/standardloop/
+  DYLIB_INCLUDE_PATH: /usr/local/include/standardloop/
+  RELEASE_VERSION: 0.0.2
+
+tasks:
+
+  default:
+    deps:
+      - lab
+
+  release:build:
+    cmds:
+      - |
+        {{.CC}} {{.CC_FLAGS}} \
+        {{range .SOURCE_FILES}} {{.}} {{end}} \
+        -O3 \
+        -dynamiclib \
+        -current_version {{.RELEASE_VERSION}} \
+        -o {{.DYLIB_NAME}}
+    sources:
+      - ./logger.c
+    generates:
+      - "{{.DYLIB_NAME}}"
+  
+  release:move-files:
+    deps:
+      - release:build
+    cmds:
+      - sudo -v
+      - sudo cp {{.DYLIB_NAME}} {{.DYLIB_PATH}}
+      - sudo cp logger.h {{.DYLIB_INCLUDE_PATH}}
+
+  release:clean:
+    allow_failure: true
+    cmds:
+      - sudo -v
+      - sudo rm -f {{.DYLIB_PATH}}/{{.DYLIB_NAME}}
+      - sudo rm -f {{.DYLIB_INCLUDE_PATH}}/logger.h
+    
+  # local test
+  release:download:
+    cmds:
+      - |
+        sudo -v
+        mkdir -p tmp
+        cd tmp
+        curl -O -J -L https://github.com/standardloop/c-logger/releases/download/v{{.RELEASE_VERSION}}/libstandardloop-logger.zip
+        unzip libstandardloop-logger.zip
+        sudo mv {{.DYLIB_NAME}} {{.DYLIB_PATH}}
+        sudo mv logger.h {{.DYLIB_INCLUDE_PATH}} 
+        rm libstandardloop-logger.zip
+
+  lab:
+    deps:
+      - lab:run
+
+  lab:build:
+    run: once
+    cmds:
+      - |
+        {{.CC}} {{.CC_FLAGS}} \
+        lab.c \
+        {{range .SOURCE_FILES}} {{.}} {{end}} \
+        -o {{.LAB_EXECUTABLE_NAME}}
+    sources:
+      - ./lab.c
+    generates:
+      - "{{.LAB_EXECUTABLE_NAME}}"
+
+  lab:run:
+    deps:
+      - lab:build
+    cmds:
+      - ./{{.LAB_EXECUTABLE_NAME}}
