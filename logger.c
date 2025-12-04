@@ -100,15 +100,8 @@ void Log(enum LogLevel level, const char *message, ...)
     switch (level)
     {
     case FATAL:
-        if (message == NULL)
-        {
-            fprintf(stderr, "{\"level\": \"FATAL\", \"message\": \"crash on purpose\"}\n");
-        }
-        else
-        {
-            fprintf(stderr, "{\"level\": \"FATAL\", ");
-        }
-        exit(EXIT_FAILURE);
+        fprintf(stderr, "{\"level\": \"FATAL\", ");
+        break;
     case ERROR:
         fprintf(stderr, "{\"level\": \"ERROR\", ");
         break;
@@ -125,7 +118,6 @@ void Log(enum LogLevel level, const char *message, ...)
         fprintf(stderr, "{\"level\": \"TRACE\", ");
         break;
     }
-
     if (logger.timestamp)
     {
         time_t rawtime;
@@ -148,5 +140,9 @@ void Log(enum LogLevel level, const char *message, ...)
     if (logger.flush)
     {
         fflush(stderr);
+    }
+    if (level == FATAL)
+    {
+        exit(EXIT_FAILURE);
     }
 }

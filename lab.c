@@ -10,5 +10,6 @@ int main(void)
     // SetLogLevel(StringToLogLevel("TRACE"));
     Log(TRACE, "hello %s", "world");
     // printf("%s\n", LogLevelToString(GetLogLevel()));
+    Log(FATAL, "");
     return EXIT_SUCCESS;
 }
