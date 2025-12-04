@@ -14,17 +14,28 @@ vars:
 
 tasks:
 
+  check-version:
+    silent: true
+    cmds:
+      - cat logger.h | grep -q {{.RELEASE_VERSION}}
+      - cat logger.h | grep -q "MAJOR_VERSION 0"
+      - cat logger.h | grep -q "MINOR_VERSION 0"
+      - cat logger.h | grep -q "PATCH_VERSION 2"
+
   default:
     deps:
       - lab
 
   release:
     deps:
+      - check-version
       - release:build
       - release:move-files
 
   release:build:
     run: once
+    deps:
+      - check-version
     cmds:
       - |
         {{.CC}} {{.CC_FLAGS}} \
