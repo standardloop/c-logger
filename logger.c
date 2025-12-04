@@ -8,7 +8,7 @@
 
 #include "logger.h"
 
-static Logger logger = {FATAL, JSON, true, true};
+static Logger logger = {FATAL, JSON_FMT, true, true};
 
 void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush)
 {
@@ -20,7 +20,7 @@ void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flu
 
 void InitLoggerEasy(enum LogLevel level)
 {
-    InitLogger(level, JSON, true, true);
+    InitLogger(level, JSON_FMT, true, true);
 }
 
 enum LogLevel StringToLogLevel(const char *input_str)

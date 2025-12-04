@@ -3,8 +3,8 @@
 
 #define STANDARDLOOP_LOGGER_H_MAJOR_VERSION 0
 #define STANDARDLOOP_LOGGER_H_MINOR_VERSION 0
-#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 2
-#define STANDARDLOOP_LOGGER_H_VERSION "0.0.2"
+#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 3
+#define STANDARDLOOP_LOGGER_H_VERSION "0.0.3"
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -26,7 +26,7 @@ enum LogLevel
 
 enum LogType
 {
-    JSON = 0,
+    JSON_FMT = 0,
 };
 
 typedef struct Logger
