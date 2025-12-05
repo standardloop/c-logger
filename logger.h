@@ -38,7 +38,7 @@ typedef struct Logger
     bool newline;
 } Logger;
 
-void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush);
+void InitLogger(enum LogLevel, enum LogType, bool, bool, bool);
 void InitLoggerEasy(enum LogLevel);
 
 void Log(enum LogLevel, const char *, ...);
