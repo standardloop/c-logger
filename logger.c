@@ -8,19 +8,20 @@
 
 #include "logger.h"
 
-static Logger logger = {FATAL, JSON_FMT, true, true};
+static Logger logger = {FATAL, JSON_FMT, true, true, true};
 
-void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush)
+void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush, bool newline)
 {
     SetLogLevel(level);
     logger.log_type = type;
     logger.timestamp = timestamp;
     logger.flush = flush;
+    logger.newline = newline;
 }
 
 void InitLoggerEasy(enum LogLevel level)
 {
-    InitLogger(level, JSON_FMT, true, true);
+    InitLogger(level, JSON_FMT, true, true, true);
 }
 
 enum LogLevel StringToLogLevel(const char *input_str)
@@ -135,7 +136,11 @@ void Log(enum LogLevel level, const char *message, ...)
     va_start(args, message);
     vfprintf(stderr, message, args);
     va_end(args);
-    fprintf(stderr, "\"}\n");
+    fprintf(stderr, "\"}");
+    if (logger.newline)
+    {
+        fprintf(stderr, "\n");
+    }
 
     if (logger.flush)
     {

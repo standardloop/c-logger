@@ -3,8 +3,8 @@
 
 #define STANDARDLOOP_LOGGER_H_MAJOR_VERSION 0
 #define STANDARDLOOP_LOGGER_H_MINOR_VERSION 0
-#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 7
-#define STANDARDLOOP_LOGGER_H_VERSION "0.0.7"
+#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 8
+#define STANDARDLOOP_LOGGER_H_VERSION "0.0.8"
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -35,6 +35,7 @@ typedef struct Logger
     enum LogType log_type;
     bool timestamp;
     bool flush;
+    bool newline;
 } Logger;
 
 void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush);
