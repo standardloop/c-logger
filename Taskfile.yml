@@ -10,7 +10,7 @@ vars:
   DYLIB_NAME: libstandardloop-logger.dylib
   DYLIB_PATH: /usr/local/lib/standardloop/
   DYLIB_INCLUDE_PATH: /usr/local/include/standardloop/
-  RELEASE_VERSION: 0.0.6
+  RELEASE_VERSION: 0.0.7
 
 tasks:
   default:
@@ -23,7 +23,7 @@ tasks:
       - cat logger.h | grep -q {{.RELEASE_VERSION}}
       - cat logger.h | grep -q "MAJOR_VERSION 0"
       - cat logger.h | grep -q "MINOR_VERSION 0"
-      - cat logger.h | grep -q "PATCH_VERSION 6"
+      - cat logger.h | grep -q "PATCH_VERSION 7"
 
   release:
     deps:
@@ -41,12 +41,11 @@ tasks:
         {{range .SOURCE_FILES}} {{.}} {{end}} \
         -O3 \
         -dynamiclib \
-        -rpath /usr/local/lib/standardloop/ \
         -current_version {{.RELEASE_VERSION}} \
         -compatibility_version {{.RELEASE_VERSION}} \
         -o {{.DYLIB_NAME}}
     sources:
-      - ./logger.c
+      - "*.c"
     generates:
       - "{{.DYLIB_NAME}}"
   
@@ -101,8 +100,7 @@ tasks:
         -lstandardloop-logger \
         -o {{.LAB_EXECUTABLE_NAME}}
     sources:
-      - lab.c
-      - logger.c
+      - "*.c"
     generates:
       - "{{.LAB_EXECUTABLE_NAME}}"
 
@@ -116,4 +114,6 @@ tasks:
     deps:
       - lab:build
     cmds:
+      - cp /usr/local/lib/standardloop/libstandardloop-logger.dylib ./ # to get around sips we need to move dylibs to local dir :(
       - leaks --atExit -- ./{{.LAB_EXECUTABLE_NAME}}
+      - rm libstandardloop-logger.dylib
