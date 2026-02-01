@@ -3,8 +3,8 @@
 
 #define STANDARDLOOP_LOGGER_H_MAJOR_VERSION 0
 #define STANDARDLOOP_LOGGER_H_MINOR_VERSION 0
-#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 8
-#define STANDARDLOOP_LOGGER_H_VERSION "0.0.8"
+#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 9
+#define STANDARDLOOP_LOGGER_H_VERSION "0.0.9"
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -26,7 +26,8 @@ enum LogLevel
 
 enum LogType
 {
-    JSON_FMT = 0,
+    STANDARD_FMT = 0,
+    JSON_FMT = 1
 };
 
 typedef struct Logger
@@ -36,9 +37,10 @@ typedef struct Logger
     bool timestamp;
     bool flush;
     bool newline;
+    bool color;
 } Logger;
 
-void InitLogger(enum LogLevel, enum LogType, bool, bool, bool);
+void InitLogger(enum LogLevel, enum LogType, bool, bool, bool, bool);
 void InitLoggerEasy(enum LogLevel);
 
 void Log(enum LogLevel, const char *, ...);

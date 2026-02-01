@@ -8,20 +8,47 @@
 
 #include "logger.h"
 
-static Logger logger = {FATAL, JSON_FMT, true, true, true};
+static Logger logger = {FATAL, JSON_FMT, true, false, true, false};
 
-void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush, bool newline)
+// log colors - START
+enum logColor
+{
+    LC_RESET = 0,
+    LC_CYAN = 1,
+    LC_BLUE = 2,
+    LC_GREEN = 3,
+    LC_YELLOW = 4,
+    LC_RED = 5,
+    LC_MAGENTA = 6,
+};
+
+#define ANSI_COLOR_RED "\x1b[31m"
+#define ANSI_COLOR_GREEN "\x1b[32m"
+#define ANSI_COLOR_YELLOW "\x1b[33m"
+#define ANSI_COLOR_BLUE "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN "\x1b[36m"
+#define ANSI_COLOR_RESET "\x1b[0m"
+
+enum logColor logLevelToColor(enum LogLevel);
+
+char *logColorToANSICode(enum logColor);
+
+// log colors - END
+
+void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush, bool newline, bool color)
 {
     SetLogLevel(level);
     logger.log_type = type;
     logger.timestamp = timestamp;
     logger.flush = flush;
     logger.newline = newline;
+    logger.color = color;
 }
 
 void InitLoggerEasy(enum LogLevel level)
 {
-    InitLogger(level, JSON_FMT, true, true, true);
+    InitLogger(level, JSON_FMT, true, false, true, false);
 }
 
 enum LogLevel StringToLogLevel(const char *input_str)
@@ -64,11 +91,53 @@ enum LogLevel GetLogLevel()
     return logger.log_level;
 }
 
+enum logColor logLevelToColor(enum LogLevel level)
+{
+    switch (level)
+    {
+    case FATAL:
+        return LC_RED;
+    case ERROR:
+        return LC_MAGENTA;
+    case WARN:
+        return LC_YELLOW;
+    case DEBUG:
+        return LC_GREEN;
+    case INFO:
+        return LC_BLUE;
+    case TRACE:
+        return LC_CYAN;
+    default:
+        return LC_CYAN;
+    }
+}
+
+char *logColorToANSICode(enum logColor color)
+{
+    switch (color)
+    {
+    // case LC_RESET:
+    case LC_CYAN:
+        return ANSI_COLOR_CYAN;
+    case LC_BLUE:
+        return ANSI_COLOR_BLUE;
+    case LC_GREEN:
+        return ANSI_COLOR_GREEN;
+    case LC_YELLOW:
+        return ANSI_COLOR_YELLOW;
+    case LC_RED:
+        return ANSI_COLOR_RED;
+    case LC_MAGENTA:
+        return ANSI_COLOR_MAGENTA;
+    default:
+        return ANSI_COLOR_CYAN;
+    }
+}
+
 char *LogLevelToString(enum LogLevel level)
 {
     switch (level)
     {
-
     case FATAL:
         return "FATAL";
     case ERROR:
@@ -98,27 +167,25 @@ void Log(enum LogLevel level, const char *message, ...)
     {
         return;
     }
-    switch (level)
+
+    const char *ll_string = LogLevelToString(level);
+
+    if (logger.color)
     {
-    case FATAL:
-        fprintf(stderr, "{\"level\": \"FATAL\", ");
-        break;
-    case ERROR:
-        fprintf(stderr, "{\"level\": \"ERROR\", ");
-        break;
-    case WARN:
-        fprintf(stderr, "{\"level\": \"WARN\", ");
-        break;
-    case DEBUG:
-        fprintf(stderr, "{\"level\": \"DEBUG\", ");
-        break;
-    case INFO:
-        fprintf(stderr, "{\"level\": \"INFO\", ");
-        break;
-    case TRACE:
-        fprintf(stderr, "{\"level\": \"TRACE\", ");
-        break;
+        fprintf(stderr, "%s", logColorToANSICode(logLevelToColor(level)));
     }
+
+    // print log level
+    if (logger.log_type == STANDARD_FMT)
+    {
+        fprintf(stderr, "[%s] ", ll_string);
+    }
+    else if (logger.log_type == JSON_FMT)
+    {
+        fprintf(stderr, "{\"level\": \"%s\", ", ll_string);
+    }
+
+    // print timestamp
     if (logger.timestamp)
     {
         time_t rawtime;
@@ -128,24 +195,51 @@ void Log(enum LogLevel level, const char *message, ...)
         time(&rawtime);
         time_info = localtime(&rawtime);
         strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", time_info);
-        fprintf(stderr, "\"timestamp\": \"%s\", ", timestamp);
+        if (logger.log_type == STANDARD_FMT)
+        {
+            fprintf(stderr, "[%s]", timestamp);
+        }
+        else if (logger.log_type == JSON_FMT)
+        {
+            fprintf(stderr, "\"timestamp\": \"%s\", ", timestamp);
+        }
     }
 
-    fprintf(stderr, "\"message\": \"");
-    va_list args;
-    va_start(args, message);
-    vfprintf(stderr, message, args);
-    va_end(args);
-    fprintf(stderr, "\"}");
+    // print message
+    {
+        if (logger.log_type == JSON_FMT)
+        {
+            fprintf(stderr, "\"message\": \"");
+        }
+        va_list args;
+        va_start(args, message);
+        vfprintf(stderr, message, args);
+        va_end(args);
+
+        if (logger.log_type == JSON_FMT)
+        {
+            fprintf(stderr, "\"}");
+        }
+    }
+
+    // print newline
     if (logger.newline)
     {
         fprintf(stderr, "\n");
     }
 
+    if (logger.color)
+    {
+        fprintf(stderr, "%s", ANSI_COLOR_RESET);
+    }
+
+    // flush, TODO research buffer
     if (logger.flush)
     {
         fflush(stderr);
     }
+
+    // FATAL will crash the program on purpose
     if (level == FATAL)
     {
         exit(EXIT_FAILURE);
