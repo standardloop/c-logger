@@ -3,8 +3,8 @@
 
 #define STANDARDLOOP_LOGGER_H_MAJOR_VERSION 0
 #define STANDARDLOOP_LOGGER_H_MINOR_VERSION 0
-#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 10
-#define STANDARDLOOP_LOGGER_H_VERSION "0.0.10"
+#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 11
+#define STANDARDLOOP_LOGGER_H_VERSION "0.0.11"
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -44,6 +44,7 @@ void InitLogger(enum LogLevel, enum LogType, bool, bool, bool, bool);
 void InitLoggerEasy(enum LogLevel);
 
 void Log(enum LogLevel, const char *, ...);
+void Panic(const char *, ...);
 void SetLogLevel(enum LogLevel);
 enum LogLevel StringToLogLevel(const char *);
 
