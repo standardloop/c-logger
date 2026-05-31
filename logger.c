@@ -242,6 +242,6 @@ void Log(enum LogLevel level, const char *message, ...)
     // FATAL will crash the program on purpose
     if (level == FATAL)
     {
-        exit(EXIT_FAILURE);
+        abort();
     }
 }
