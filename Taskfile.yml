@@ -10,7 +10,7 @@ vars:
   DYLIB_NAME: libstandardloop-logger.dylib
   DYLIB_PATH: /usr/local/lib/standardloop/
   DYLIB_INCLUDE_PATH: /usr/local/include/standardloop/
-  RELEASE_VERSION: 0.0.11
+  RELEASE_VERSION: 0.0.12
 
 tasks:
   default:
@@ -23,7 +23,7 @@ tasks:
       - cat logger.h | grep -q {{.RELEASE_VERSION}}
       - cat logger.h | grep -q "MAJOR_VERSION 0"
       - cat logger.h | grep -q "MINOR_VERSION 0"
-      - cat logger.h | grep -q "PATCH_VERSION 11"
+      - cat logger.h | grep -q "PATCH_VERSION 12"
 
   release:
     deps:
@@ -39,7 +39,7 @@ tasks:
       - |
         {{.CC}} {{.CC_FLAGS}} \
         {{range .SOURCE_FILES}} {{.}} {{end}} \
-        -O3 \
+        -O2 \
         -dynamiclib \
         -current_version {{.RELEASE_VERSION}} \
         -compatibility_version {{.RELEASE_VERSION}} \
@@ -95,7 +95,6 @@ tasks:
       - |
         {{.CC}} {{.CC_FLAGS}} \
         lab.c \
-        {{range .SOURCE_FILES}} {{.}} {{end}} \
         -L/usr/local/lib/standardloop \
         -lstandardloop-logger \
         -o {{.LAB_EXECUTABLE_NAME}}

@@ -1,12 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// #include <standardloop/logger.h>
-#include "logger.h"
+#include <standardloop/logger.h>
+// #include "logger.h"
 
 int main(void)
 {
-    InitLoggerEasy(StringToLogLevel("TRACE"));
+    // InitLoggerEasy(StringToLogLevel("TRACE"));
     // SetLogLevel(StringToLogLevel("TRACE"));
     Log(TRACE, "hello %s", "world");
     // printf("%s\n", LogLevelToString(GetLogLevel()));
@@ -17,6 +17,7 @@ int main(void)
     Log(DEBUG, "hello %s", "world");
     Log(WARN, "hello %s", "world");
     Log(ERROR, "hello %s", "world");
-    Log(FATAL, "hello %s", "world");
+    // Log(FATAL, "hello %s", "world");
+    Panic("test");
     return EXIT_SUCCESS;
 }
