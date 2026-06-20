@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: echo vars
         run: |
@@ -25,7 +25,7 @@ jobs:
           echo ${{ env.ZIP_NAME }}
 
       - name: Install Task
-        uses: go-task/setup-task@v1
+        uses: go-task/setup-task@v2
 
       - name: Build the dylib
         run: |
