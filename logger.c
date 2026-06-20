@@ -8,7 +8,7 @@
 
 #include "logger.h"
 
-static Logger logger = {FATAL, JSON_FMT, true, false, true, false};
+static Logger logger = {.log_level = FATAL, .log_type = JSON_FMT, .timestamp = true, .flush = false, .newline = true, .color = false};
 
 // log colors - START
 enum logColor
@@ -30,13 +30,13 @@ enum logColor
 #define ANSI_COLOR_CYAN "\x1b[36m"
 #define ANSI_COLOR_RESET "\x1b[0m"
 
-enum logColor logLevelToColor(enum LogLevel);
-
-char *logColorToANSICode(enum logColor);
+static enum logColor logLevelToColor(enum LogLevel);
+static char *logColorToANSICode(enum logColor);
+static char *logTypeToString(enum LogType);
 
 // log colors - END
 
-void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush, bool newline, bool color)
+extern void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush, bool newline, bool color)
 {
     SetLogLevel(level);
     logger.log_type = type;
@@ -46,12 +46,35 @@ void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flu
     logger.color = color;
 }
 
-void InitLoggerEasy(enum LogLevel level)
+extern void InitLoggerEasy(enum LogLevel level)
 {
     InitLogger(level, JSON_FMT, true, false, true, false);
 }
 
-enum LogLevel StringToLogLevel(const char *input_str)
+extern void PrintLoggerConfig(void)
+{
+    printf("Level: %s\n", LogLevelToString(logger.log_level));
+    printf("Type: %s\n", logTypeToString(logger.log_type));
+    printf("Timestamp enabled: %s\n", logger.timestamp ? "TRUE" : "FALSE");
+    printf("Flush enabled: %s\n", logger.flush ? "TRUE" : "FALSE");
+    printf("Newline enabled: %s\n", logger.newline ? "TRUE" : "FALSE");
+    printf("Color enabled: %s\n", logger.color ? "TRUE" : "FALSE");
+}
+
+static char *logTypeToString(enum LogType type)
+{
+    switch (type)
+    {
+    case JSON_FMT:
+        return "JSON";
+    case STANDARD_FMT:
+        return "STANDARD";
+    default:
+        return "UNKNOWN";
+    }
+}
+
+extern enum LogLevel StringToLogLevel(const char *input_str)
 {
     if (strcmp(input_str, "TRACE") == 0)
     {
@@ -81,17 +104,17 @@ enum LogLevel StringToLogLevel(const char *input_str)
     return TRACE;
 }
 
-void SetLogLevel(enum LogLevel level)
+extern void SetLogLevel(enum LogLevel level)
 {
     logger.log_level = level;
 }
 
-enum LogLevel GetLogLevel()
+extern enum LogLevel GetLogLevel()
 {
     return logger.log_level;
 }
 
-enum logColor logLevelToColor(enum LogLevel level)
+static enum logColor logLevelToColor(enum LogLevel level)
 {
     switch (level)
     {
@@ -112,7 +135,7 @@ enum logColor logLevelToColor(enum LogLevel level)
     }
 }
 
-char *logColorToANSICode(enum logColor color)
+static char *logColorToANSICode(enum logColor color)
 {
     switch (color)
     {
@@ -134,7 +157,7 @@ char *logColorToANSICode(enum logColor color)
     }
 }
 
-char *LogLevelToString(enum LogLevel level)
+extern char *LogLevelToString(enum LogLevel level)
 {
     switch (level)
     {
@@ -156,7 +179,7 @@ char *LogLevelToString(enum LogLevel level)
     return NULL;
 }
 
-void Log(enum LogLevel level, const char *message, ...)
+extern void Log(enum LogLevel level, const char *message, ...)
 {
     // FIXMELog configuration
     // char buff[1024];
@@ -243,8 +266,9 @@ void Log(enum LogLevel level, const char *message, ...)
     }
 }
 
+// WIP combine with above
 #define PANIC_STR "PANIC"
-void Panic(const char *message, ...)
+extern void Panic(const char *message, ...)
 {
 
     if (logger.color)

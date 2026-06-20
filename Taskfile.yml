@@ -2,7 +2,7 @@
 version: '3'
 
 vars:
-  CC: gcc
+  CC: clang
   CC_FLAGS: "-Werror -Wextra -Wall -Wfree-nonheap-object -std=c17"
   LAB_EXECUTABLE_NAME: lab
   SOURCE_FILES:
@@ -10,7 +10,7 @@ vars:
   DYLIB_NAME: libstandardloop-logger.dylib
   DYLIB_PATH: /usr/local/lib/standardloop/
   DYLIB_INCLUDE_PATH: /usr/local/include/standardloop/
-  RELEASE_VERSION: 0.0.14
+  RELEASE_VERSION: 0.0.17
 
 tasks:
   default:
@@ -23,7 +23,7 @@ tasks:
       - cat logger.h | grep -q {{.RELEASE_VERSION}}
       - cat logger.h | grep -q "MAJOR_VERSION 0"
       - cat logger.h | grep -q "MINOR_VERSION 0"
-      - cat logger.h | grep -q "PATCH_VERSION 14"
+      - cat logger.h | grep -q "PATCH_VERSION 17"
 
   release:
     deps:
@@ -39,7 +39,7 @@ tasks:
       - |
         {{.CC}} {{.CC_FLAGS}} \
         {{range .SOURCE_FILES}} {{.}} {{end}} \
-        -O2 \
+        -O3 \
         -dynamiclib \
         -current_version {{.RELEASE_VERSION}} \
         -compatibility_version {{.RELEASE_VERSION}} \
@@ -54,15 +54,15 @@ tasks:
       - release:build
     cmds:
       - sudo -v
-      - sudo cp {{.DYLIB_NAME}} {{.DYLIB_PATH}}
+      - sudo mv {{.DYLIB_NAME}} {{.DYLIB_PATH}}
       - sudo cp logger.h {{.DYLIB_INCLUDE_PATH}}
 
   release:clean:
     allow_failure: true
     cmds:
       - sudo -v
-      - sudo rm -f {{.DYLIB_PATH}}/{{.DYLIB_NAME}}
-      - sudo rm -f {{.DYLIB_INCLUDE_PATH}}/logger.h
+      - sudo rm -f {{.DYLIB_PATH}}{{.DYLIB_NAME}}
+      - sudo rm -f {{.DYLIB_INCLUDE_PATH}}logger.h
     
   # local test
   remote:download:
@@ -95,6 +95,7 @@ tasks:
       - |
         {{.CC}} {{.CC_FLAGS}} \
         lab.c \
+        {{range .SOURCE_FILES}} {{.}} {{end}} \
         -L/usr/local/lib/standardloop \
         -lstandardloop-logger \
         -o {{.LAB_EXECUTABLE_NAME}}

@@ -3,8 +3,8 @@
 
 #define STANDARDLOOP_LOGGER_H_MAJOR_VERSION 0
 #define STANDARDLOOP_LOGGER_H_MINOR_VERSION 0
-#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 14
-#define STANDARDLOOP_LOGGER_H_VERSION "0.0.14"
+#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 17
+#define STANDARDLOOP_LOGGER_H_VERSION "0.0.17"
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -40,15 +40,16 @@ typedef struct Logger
     bool color;
 } Logger;
 
-void InitLogger(enum LogLevel, enum LogType, bool, bool, bool, bool);
-void InitLoggerEasy(enum LogLevel);
+extern void InitLogger(enum LogLevel, enum LogType, bool, bool, bool, bool);
+extern void InitLoggerEasy(enum LogLevel);
+extern void PrintLoggerConfig(void);
 
-void Log(enum LogLevel, const char *, ...);
-void Panic(const char *, ...);
-void SetLogLevel(enum LogLevel);
-enum LogLevel StringToLogLevel(const char *);
+extern void Log(enum LogLevel, const char *, ...);
+extern void Panic(const char *, ...);
+extern void SetLogLevel(enum LogLevel);
+extern enum LogLevel StringToLogLevel(const char *);
 
-enum LogLevel GetLogLevel();
-char *LogLevelToString(enum LogLevel);
+extern enum LogLevel GetLogLevel();
+extern char *LogLevelToString(enum LogLevel);
 
 #endif
