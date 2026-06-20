@@ -54,7 +54,7 @@ tasks:
       - release:build
     cmds:
       - sudo -v
-      - sudo mv {{.DYLIB_NAME}} {{.DYLIB_PATH}}
+      - sudo cp {{.DYLIB_NAME}} {{.DYLIB_PATH}}
       - sudo cp logger.h {{.DYLIB_INCLUDE_PATH}}
 
   release:clean:
