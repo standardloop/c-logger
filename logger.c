@@ -1,14 +1,18 @@
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "logger.h"
 
-static Logger logger = {.log_level = FATAL, .log_type = JSON_FMT, .timestamp = true, .flush = false, .newline = true, .color = false};
+static Logger logger = {.log_level = FATAL,
+                        .log_type = JSON_FMT,
+                        .timestamp = true,
+                        .flush = false,
+                        .newline = true,
+                        .color = false};
 
 // log colors - START
 enum logColor
@@ -36,7 +40,8 @@ static char *logTypeToString(enum LogType);
 
 // log colors - END
 
-extern void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush, bool newline, bool color)
+extern void InitLogger(enum LogLevel level, enum LogType type, bool timestamp,
+                       bool flush, bool newline, bool color)
 {
     SetLogLevel(level);
     logger.log_type = type;

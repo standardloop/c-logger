@@ -1,22 +1,34 @@
 # c-logger
 
-Simple C logging package created from scratch for educational purposes
+[https://github.com/standardloop/c-logger](https://github.com/standardloop/c-logger)
 
-## Disclaimer
+[![GitHub Release](https://img.shields.io/github/v/release/standardloop/c-logger?sort=semver)](https://github.com/standardloop/c-logger/releases) ![C Version](https://img.shields.io/badge/C_Standard-C17-00599C?logo=c&logoColor=white)
 
-The taskfile is currently only configured for macOS
+## About
+
+`c-logger` is a small logger dynamic library.
+
+Right now, it is essentially a wrapper around `fprintf`.
+
+I use it for many of my projects.
+
+It supports:
+
+- `JSON` logs or Normal Logs
+- Add a date to the log.
+- Log levels
+  - `TRACE`
+  - `DEBUG`
+  - `INFO`
+  - `WARN`
+  - `ERROR`
+  - `FATAL`
+- Color Output
 
 ## Usage
 
-### Setup
-
-```sh
-$ task release
-```
-
 ### Example Program
 
-#### Source
 ```C
 #include <stdlib.h>
 #include <stdio.h>

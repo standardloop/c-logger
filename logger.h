@@ -6,12 +6,11 @@
 #define STANDARDLOOP_LOGGER_H_PATCH_VERSION 17
 #define STANDARDLOOP_LOGGER_H_VERSION "0.0.17"
 
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 enum LogLevel
