@@ -54,14 +54,14 @@ enum LogLevel
 
 The level of the log, the lower the number the higher the severity.
 
-| Value   | Description |
-| ------- | ----------- |
-| `TRACE` |             |
-| `DEBUG` |             |
-| `INFO`  |             |
-| `WARN`  |             |
-| `ERROR` |             |
-| `FATAL` |             |
+| Value   | Description                                                                                             |
+| ------- | ------------------------------------------------------------------------------------------------------- |
+| `TRACE` | Most verbose log level.                                                                                 |
+| `DEBUG` | Diagnostic information used for troubleshooting and testing.                                            |
+| `INFO`  | Standard informational messages confirming that things are working as expected..                        |
+| `WARN`  | Indicates an unexpected or abnormal event that does not disrupt current application.                    |
+| `ERROR` | Used when a specific transaction or functionality fails, but the rest of the application stays running. |
+| `FATAL` | The highest and most severe level. It indicates a catastrophic failure that crashes the application.    |
 
 ---
 
@@ -73,10 +73,10 @@ enum LogType
 
 How log outputs should look, standard or JSON.
 
-| Value          | Description |
-| -------------- | ----------- |
-| `STANDARD_FMT` |             |
-| `JSON_FMT`     |             |
+| Value          | Description                                             |
+| -------------- | ------------------------------------------------------- |
+| `STANDARD_FMT` | Standard log format, just printing `[$LEVEL]: $MESSAGE` |
+| `JSON_FMT`     | Output logs as JSON, `{"$LEVEL": "$MESSAGE"}`           |
 
 ## Functions
 

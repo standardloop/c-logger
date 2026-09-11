@@ -36,11 +36,21 @@
  */
 enum LogLevel
 {
+    /** Most verbose log level. */
     TRACE = 5,
+    /** Diagnostic information used for troubleshooting and testing. */
     DEBUG = 4,
+    /** Standard informational messages confirming that things are working as
+     * expected.. */
     INFO = 3,
+    /** Indicates an unexpected or abnormal event that does not disrupt current
+     * application. */
     WARN = 2,
+    /** Used when a specific transaction or functionality fails, but the rest of
+     * the application stays running. */
     ERROR = 1,
+    /** The highest and most severe level. It indicates a catastrophic failure
+     * that crashes the application. */
     FATAL = 0,
 };
 
@@ -49,7 +59,9 @@ enum LogLevel
  */
 enum LogType
 {
+    /** Standard log format, just printing `[$LEVEL]: $MESSAGE` */
     STANDARD_FMT = 0,
+    /** Output logs as JSON, `{"$LEVEL": "$MESSAGE"}` */
     JSON_FMT = 1
 };
 
