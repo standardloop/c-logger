@@ -42,3 +42,9 @@ int main(void)
     return EXIT_SUCCESS;
 }
 ```
+
+## Docs
+
+Docs are generated a first generated with `doxygen` as `xml` and then `moxygen` reads the xml to output markdown in the `docs/` folder.
+
+See the `docs` tasks in the `Taskfile.yml`
