@@ -1,14 +1,26 @@
 /**
  * @file logger.h
- * @brief Header file
+ * @brief Small C logger library.
  */
 
 #ifndef STANDARDLOOP_LOGGER_H
 #define STANDARDLOOP_LOGGER_H
 
+/**
+ * @brief Major version of this library.
+ */
 #define STANDARDLOOP_LOGGER_H_MAJOR_VERSION 0
+/**
+ * @brief Minor version of this library.
+ */
 #define STANDARDLOOP_LOGGER_H_MINOR_VERSION 0
+/**
+ * @brief Patch version of this library.
+ */
 #define STANDARDLOOP_LOGGER_H_PATCH_VERSION 17
+/**
+ * @brief Version of this library as a string.
+ */
 #define STANDARDLOOP_LOGGER_H_VERSION "0.0.17"
 
 #include <stdarg.h>
@@ -18,6 +30,9 @@
 #include <string.h>
 #include <time.h>
 
+/**
+ * @brief The level of the log, the lower the number the higher the severity.
+ */
 enum LogLevel
 {
     TRACE = 5,
@@ -28,24 +43,36 @@ enum LogLevel
     FATAL = 0,
 };
 
+/**
+ * @brief How log outputs should look, standard or JSON.
+ */
 enum LogType
 {
     STANDARD_FMT = 0,
     JSON_FMT = 1
 };
 
+/**
+ * @brief The Logger Struct
+ */
 typedef struct Logger
 {
+    /** The log level. */
     enum LogLevel log_level;
+    /** The log type. */
     enum LogType log_type;
+    /** Should the logger output timestamps. */
     bool timestamp;
+    /** Should the logger call flush after outputting. */
     bool flush;
+    /** Should the logger add a newline to messages. */
     bool newline;
+    /** Should the logger output in color. */
     bool color;
 } Logger;
 
 /**
- * @brief Initializes the Logger
+ * @brief Initializes the Logger.
  * @param level The log level from the LogLevel enum.
  * @param type The log type from the LogType enum.
  * @param timestamp Turn on or off timestamps in logs.
@@ -55,15 +82,57 @@ typedef struct Logger
  */
 extern void InitLogger(enum LogLevel level, enum LogType type, bool timestamp,
                        bool flush, bool newline, bool color);
-extern void InitLoggerEasy(enum LogLevel);
+
+/**
+ * @brief Initializes the Logger the easy way — more defaults.
+ * @param level The log level from the LogLevel enum.
+ */
+extern void InitLoggerEasy(enum LogLevel level);
+
+/**
+ * @brief Pretty prints the current logger config
+ */
 extern void PrintLoggerConfig(void);
 
-extern void Log(enum LogLevel, const char *, ...);
-extern void Panic(const char *, ...);
-extern void SetLogLevel(enum LogLevel);
-extern enum LogLevel StringToLogLevel(const char *);
+/**
+ * @brief The most important function of this library - Logs a message.
+ * @param level The log level.
+ * @param message The message itself to log.
+ * @param ... Extra args for format specification.
+ */
+extern void Log(enum LogLevel level, const char *message, ...);
 
+/**
+ * @brief Similiar to Log but has a custom level and runs abort() at the end. 
+ * @param message The message itself to log.
+ * @param ... Extra args for format specification.
+ */
+extern void Panic(const char *message, ...);
+
+/**
+ * @brief Sets the log level for the logger.
+ * @param level What level to set to.
+ */
+extern void SetLogLevel(enum LogLevel level);
+
+/**
+ * @brief Sets the log level for the logger.
+ * @param input_str The desired log level as a string.
+ * @return The log level as an enum value.
+ */
+extern enum LogLevel StringToLogLevel(const char *input_str);
+
+/**
+ * @brief Gets the current log level.
+ * @return The current log level as an enum value.
+ */
 extern enum LogLevel GetLogLevel();
-extern char *LogLevelToString(enum LogLevel);
+
+/**
+ * @brief Converts and returns a log level enum value as a string.
+ * @param level The desired log level as an enum value.
+ * @return The current log level as an string value.
+ */
+extern char *LogLevelToString(enum LogLevel level);
 
 #endif
