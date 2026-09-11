@@ -16,8 +16,6 @@
 #define STANDARDLOOP_LOGGER_H_MAJOR_VERSION 0
 ```
 
-Defined in logger.h:12
-
 Major version of this library.
 
 ---
@@ -27,8 +25,6 @@ Major version of this library.
 ```cpp
 #define STANDARDLOOP_LOGGER_H_MINOR_VERSION 0
 ```
-
-Defined in logger.h:16
 
 Minor version of this library.
 
@@ -40,8 +36,6 @@ Minor version of this library.
 #define STANDARDLOOP_LOGGER_H_PATCH_VERSION 17
 ```
 
-Defined in logger.h:20
-
 Patch version of this library.
 
 ---
@@ -51,8 +45,6 @@ Patch version of this library.
 ```cpp
 #define STANDARDLOOP_LOGGER_H_VERSION "0.0.17"
 ```
-
-Defined in logger.h:24
 
 Version of this library as a string.
 
@@ -65,8 +57,6 @@ Version of this library as a string.
 ```cpp
 enum LogLevel
 ```
-
-Defined in logger.h:36
 
 The level of the log, the lower the number the higher the severity.
 
@@ -87,8 +77,6 @@ The level of the log, the lower the number the higher the severity.
 enum LogType
 ```
 
-Defined in logger.h:49
-
 How log outputs should look, standard or JSON.
 
 | Value          | Description |
@@ -106,8 +94,6 @@ How log outputs should look, standard or JSON.
 using Logger = struct Logger
 ```
 
-Defined in logger.h:72
-
 The [Logger](#logger-1) Struct.
 
 ## Functions
@@ -119,8 +105,6 @@ The [Logger](#logger-1) Struct.
 ```cpp
 void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush, bool newline, bool color)
 ```
-
-Defined in logger.h:83
 
 Initializes the [Logger](#logger-1).
 
@@ -143,8 +127,6 @@ Initializes the [Logger](#logger-1).
 void InitLoggerEasy(enum LogLevel level)
 ```
 
-Defined in logger.h:90
-
 Initializes the [Logger](#logger-1) the easy way — more defaults.
 
 #### Parameters
@@ -161,8 +143,6 @@ Initializes the [Logger](#logger-1) the easy way — more defaults.
 void PrintLoggerConfig(void)
 ```
 
-Defined in logger.h:95
-
 Pretty prints the current logger config.
 
 ---
@@ -172,8 +152,6 @@ Pretty prints the current logger config.
 ```cpp
 void Log(enum LogLevel level, const char * message, ...)
 ```
-
-Defined in logger.h:103
 
 The most important function of this library - Logs a message.
 
@@ -192,8 +170,6 @@ The most important function of this library - Logs a message.
 void Panic(const char * message, ...)
 ```
 
-Defined in logger.h:110
-
 Similiar to Log but has a custom level and runs abort() at the end.
 
 #### Parameters
@@ -210,8 +186,6 @@ Similiar to Log but has a custom level and runs abort() at the end.
 void SetLogLevel(enum LogLevel level)
 ```
 
-Defined in logger.h:116
-
 Sets the log level for the logger.
 
 #### Parameters
@@ -227,8 +201,6 @@ Sets the log level for the logger.
 ```cpp
 enum LogLevel StringToLogLevel(const char * input_str)
 ```
-
-Defined in logger.h:123
 
 Sets the log level for the logger.
 
@@ -250,8 +222,6 @@ The log level as an enum value.
 enum LogLevel GetLogLevel()
 ```
 
-Defined in logger.h:129
-
 Gets the current log level.
 
 #### Returns
@@ -265,8 +235,6 @@ The current log level as an enum value.
 ```cpp
 char * LogLevelToString(enum LogLevel level)
 ```
-
-Defined in logger.h:136
 
 Converts and returns a log level enum value as a string.
 
@@ -289,8 +257,6 @@ The current log level as an string value.
 ```cpp
 struct Logger
 ```
-
-Defined in logger.h:58
 
 The [Logger](#logger-1) Struct.
 
@@ -315,8 +281,6 @@ enum LogLevel log_level
 
 Type: enum [`LogLevel`](#loglevel)
 
-Defined in logger.h:61
-
 The log level.
 
 ---
@@ -329,8 +293,6 @@ enum LogType log_type
 
 Type: enum [`LogType`](#logtype)
 
-Defined in logger.h:63
-
 The log type.
 
 ---
@@ -340,8 +302,6 @@ The log type.
 ```cpp
 bool timestamp
 ```
-
-Defined in logger.h:65
 
 Should the logger output timestamps.
 
@@ -353,8 +313,6 @@ Should the logger output timestamps.
 bool flush
 ```
 
-Defined in logger.h:67
-
 Should the logger call flush after outputting.
 
 ---
@@ -365,8 +323,6 @@ Should the logger call flush after outputting.
 bool newline
 ```
 
-Defined in logger.h:69
-
 Should the logger add a newline to messages.
 
 ---
@@ -376,8 +332,6 @@ Should the logger add a newline to messages.
 ```cpp
 bool color
 ```
-
-Defined in logger.h:71
 
 Should the logger output in color.
 
