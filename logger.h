@@ -1,5 +1,6 @@
 /**
  * @file logger.h
+ * @headerfile logger.h <standardloop/logger.h>
  * @brief Small C logger library.
  */
 
@@ -52,10 +53,11 @@ enum LogType
     JSON_FMT = 1
 };
 
+/// @cond INTERNAL
 /**
  * @brief The Logger Struct
  */
-typedef struct Logger
+typedef struct
 {
     /** The log level. */
     enum LogLevel log_level;
@@ -70,6 +72,7 @@ typedef struct Logger
     /** Should the logger output in color. */
     bool color;
 } Logger;
+/// @endcond
 
 /**
  * @brief Initializes the Logger.
@@ -103,7 +106,7 @@ extern void PrintLoggerConfig(void);
 extern void Log(enum LogLevel level, const char *message, ...);
 
 /**
- * @brief Similiar to Log but has a custom level and runs abort() at the end. 
+ * @brief Similiar to Log but has a custom level and runs abort() at the end.
  * @param message The message itself to log.
  * @param ... Extra args for format specification.
  */
