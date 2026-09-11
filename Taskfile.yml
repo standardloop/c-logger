@@ -1,6 +1,8 @@
 ---
 version: "3"
 
+silent: true
+
 vars:
   CC: clang
   CC_FLAGS: "-Werror -Wextra -Wall -Wfree-nonheap-object -std=c17"
@@ -117,3 +119,19 @@ tasks:
       - cp /usr/local/lib/standardloop/libstandardloop-logger.dylib ./ # to get around sips we need to move dylibs to local dir
       - leaks --atExit -- ./{{.LAB_EXECUTABLE_NAME}}
       - rm libstandardloop-logger.dylib
+
+  docs:
+    deps:
+      - docs:moxygen
+
+  docs:doxygen:
+    desc: "https://www.doxygen.nl/"
+    cmds:
+      - doxygen Doxyfile
+
+  docs:moxygen:
+    desc: "https://0state.com/moxygen"
+    deps:
+      - docs:doxygen
+    cmds:
+      - moxygen doxygen/xml/ --output docs/index.md --quiet --language cpp

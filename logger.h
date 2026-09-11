@@ -1,3 +1,8 @@
+/**
+ * @file logger.h
+ * @brief Header file
+ */
+
 #ifndef STANDARDLOOP_LOGGER_H
 #define STANDARDLOOP_LOGGER_H
 
@@ -39,7 +44,17 @@ typedef struct Logger
     bool color;
 } Logger;
 
-extern void InitLogger(enum LogLevel, enum LogType, bool, bool, bool, bool);
+/**
+ * @brief Initializes the Logger
+ * @param level The log level from the LogLevel enum.
+ * @param type The log type from the LogType enum.
+ * @param timestamp Turn on or off timestamps in logs.
+ * @param flush If true, fflush(stderr) will be called.
+ * @param newline If true, a newline will be inserted.
+ * @param color If true, color output will be enabled.
+ */
+extern void InitLogger(enum LogLevel level, enum LogType type, bool timestamp,
+                       bool flush, bool newline, bool color);
 extern void InitLoggerEasy(enum LogLevel);
 extern void PrintLoggerConfig(void);
 
