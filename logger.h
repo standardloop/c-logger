@@ -65,27 +65,6 @@ enum LogType
     JSON_FMT = 1
 };
 
-/// @cond INTERNAL
-/**
- * @brief The Logger Struct
- */
-typedef struct
-{
-    /** The log level. */
-    enum LogLevel log_level;
-    /** The log type. */
-    enum LogType log_type;
-    /** Should the logger output timestamps. */
-    bool timestamp;
-    /** Should the logger call flush after outputting. */
-    bool flush;
-    /** Should the logger add a newline to messages. */
-    bool newline;
-    /** Should the logger output in color. */
-    bool color;
-} Logger;
-/// @endcond
-
 /**
  * @brief Initializes the Logger.
  * @param level The log level from the LogLevel enum.

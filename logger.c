@@ -7,6 +7,25 @@
 
 #include "logger.h"
 
+/**
+ * @brief The Logger Struct
+ */
+typedef struct
+{
+    /** The log level. */
+    enum LogLevel log_level;
+    /** The log type. */
+    enum LogType log_type;
+    /** Should the logger output timestamps. */
+    bool timestamp;
+    /** Should the logger call flush after outputting. */
+    bool flush;
+    /** Should the logger add a newline to messages. */
+    bool newline;
+    /** Should the logger output in color. */
+    bool color;
+} Logger;
+
 static Logger logger = {.log_level = FATAL,
                         .log_type = JSON_FMT,
                         .timestamp = true,

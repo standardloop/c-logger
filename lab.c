@@ -10,11 +10,11 @@ int main(void)
     // SetLogLevel(StringToLogLevel("TRACE"));
     // Log(TRACE, "hello %s", "world");
     // printf("%s\n", LogLevelToString(GetLogLevel()));
-
+    InitLogger(TRACE, STANDARD_FMT, false, true, true, true);
     PrintLoggerConfig();
 
-    // InitLogger(TRACE, STANDARD_FMT, false, true, true, true);
-    // Log(TRACE, "hello %s", "world");
+    InitLogger(TRACE, STANDARD_FMT, false, true, true, true);
+    Log(TRACE, "hello %s", "world");
     // Log(INFO, "hello %s", "world");
     // Log(DEBUG, "hello %s", "world");
     // Log(WARN, "hello %s", "world");

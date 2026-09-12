@@ -129,4 +129,4 @@ tasks:
 
   docs:
     deps:
-      - c:docs:moxygen # from import
+      - c:docs:moxygen
