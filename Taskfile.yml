@@ -12,7 +12,6 @@ vars:
   DYLIB_NAME: libstandardloop-logger.dylib
   DYLIB_PATH: /usr/local/lib/standardloop/
   DYLIB_INCLUDE_PATH: /usr/local/include/standardloop/
-  RELEASE_VERSION: 0.0.17
 
 includes:
   c: https://raw.githubusercontent.com/standardloop/taskfiles/refs/heads/main/c.yml # can pin in future
@@ -22,32 +21,22 @@ tasks:
     deps:
       - lab
 
-  check-version:
-    silent: true
-    cmds:
-      - cat logger.h | grep -q {{.RELEASE_VERSION}}
-      - cat logger.h | grep -q "MAJOR_VERSION 0"
-      - cat logger.h | grep -q "MINOR_VERSION 0"
-      - cat logger.h | grep -q "PATCH_VERSION 17"
-
   release:
     deps:
-      - check-version
       - release:build
       - release:move-files
 
+  # GH_RELEASE_VERSION is set by CI
   release:build:
     run: once
-    deps:
-      - check-version
     cmds:
       - |
         {{.CC}} {{.CC_FLAGS}} \
         {{range .SOURCE_FILES}} {{.}} {{end}} \
         -O3 \
         -dynamiclib \
-        -current_version {{.RELEASE_VERSION}} \
-        -compatibility_version {{.RELEASE_VERSION}} \
+        -current_version {{.GH_RELEASE_VERSION}} \
+        -compatibility_version {{.GH_RELEASE_VERSION}} \
         -o {{.DYLIB_NAME}}
     sources:
       - "*.c"
@@ -61,34 +50,6 @@ tasks:
       - sudo -v
       - sudo cp {{.DYLIB_NAME}} {{.DYLIB_PATH}}
       - sudo cp logger.h {{.DYLIB_INCLUDE_PATH}}
-
-  release:clean:
-    ignore_error: true
-    cmds:
-      - sudo -v
-      - sudo rm -f {{.DYLIB_PATH}}{{.DYLIB_NAME}}
-      - sudo rm -f {{.DYLIB_INCLUDE_PATH}}logger.h
-
-  # local test
-  remote:download:
-    run: once
-    cmds:
-      - |
-        mkdir -p tmp
-        cd tmp
-        curl -O -J -L https://github.com/standardloop/c-logger/releases/download/v{{.RELEASE_VERSION}}/libstandardloop-logger.zip
-        unzip libstandardloop-logger.zip
-        rm libstandardloop-logger.zip
-
-  remote:move:
-    deps:
-      - remote:download
-    cmds:
-      - |
-        cd tmp/
-        sudo -v
-        sudo mv {{.DYLIB_NAME}} {{.DYLIB_PATH}}
-        sudo mv logger.h {{.DYLIB_INCLUDE_PATH}}
 
   lab:
     deps:

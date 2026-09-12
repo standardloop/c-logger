@@ -7,23 +7,6 @@
 #ifndef STANDARDLOOP_LOGGER_H
 #define STANDARDLOOP_LOGGER_H
 
-/**
- * @brief Major version of this library.
- */
-#define STANDARDLOOP_LOGGER_H_MAJOR_VERSION 0
-/**
- * @brief Minor version of this library.
- */
-#define STANDARDLOOP_LOGGER_H_MINOR_VERSION 0
-/**
- * @brief Patch version of this library.
- */
-#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 17
-/**
- * @brief Version of this library as a string.
- */
-#define STANDARDLOOP_LOGGER_H_VERSION "0.0.17"
-
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>

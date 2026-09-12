@@ -1,47 +1,5 @@
 # API Reference
 
-## Macros
-
----
-
-### STANDARDLOOP_LOGGER_H_MAJOR_VERSION
-
-```cpp
-#define STANDARDLOOP_LOGGER_H_MAJOR_VERSION 0
-```
-
-Major version of this library.
-
----
-
-### STANDARDLOOP_LOGGER_H_MINOR_VERSION
-
-```cpp
-#define STANDARDLOOP_LOGGER_H_MINOR_VERSION 0
-```
-
-Minor version of this library.
-
----
-
-### STANDARDLOOP_LOGGER_H_PATCH_VERSION
-
-```cpp
-#define STANDARDLOOP_LOGGER_H_PATCH_VERSION 17
-```
-
-Patch version of this library.
-
----
-
-### STANDARDLOOP_LOGGER_H_VERSION
-
-```cpp
-#define STANDARDLOOP_LOGGER_H_VERSION "0.0.17"
-```
-
-Version of this library as a string.
-
 ## Enumerations
 
 ---
