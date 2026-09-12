@@ -37,20 +37,23 @@
 enum LogLevel
 {
     /** Most verbose log level. */
-    TRACE = 5,
+    TRACE = 6,
     /** Diagnostic information used for troubleshooting and testing. */
-    DEBUG = 4,
+    DEBUG = 5,
     /** Standard informational messages confirming that things are working as
      * expected.. */
-    INFO = 3,
+    INFO = 4,
     /** Indicates an unexpected or abnormal event that does not disrupt current
      * application. */
-    WARN = 2,
+    WARN = 3,
     /** Used when a specific transaction or functionality fails, but the rest of
      * the application stays running. */
-    ERROR = 1,
+    ERROR = 2,
+    /** It indicates a unexpected failure. Will call `abort()` after logging. */
+    PANIC = 1,
     /** The highest and most severe level. It indicates a catastrophic failure
-     * that crashes the application. */
+     * that crashes the application. Will call `exit(EXIT_FAILURE)` afterwards.
+     */
     FATAL = 0,
 };
 

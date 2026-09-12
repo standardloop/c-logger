@@ -124,6 +124,10 @@ extern enum LogLevel StringToLogLevel(const char *input_str)
     {
         return FATAL;
     }
+    else if (strcmp(input_str, "PANIC") == 0)
+    {
+        return PANIC;
+    }
     Log(ERROR, "cannot parse log level, will default to TRACE");
     return TRACE;
 }
@@ -142,6 +146,7 @@ static enum logColor logLevelToColor(enum LogLevel level)
 {
     switch (level)
     {
+    case PANIC:
     case FATAL:
         return LC_RED;
     case ERROR:
@@ -185,6 +190,8 @@ extern char *LogLevelToString(enum LogLevel level)
 {
     switch (level)
     {
+    case PANIC:
+        return "PANIC";
     case FATAL:
         return "FATAL";
     case ERROR:
@@ -283,83 +290,12 @@ extern void Log(enum LogLevel level, const char *message, ...)
         fflush(stderr);
     }
 
-    // FATAL will crash the program on purpose
-    if (level == FATAL)
+    if (level == PANIC)
+    {
+        abort();
+    }
+    else if (level == FATAL)
     {
         exit(EXIT_FAILURE);
     }
-}
-
-// WIP combine with above
-#define PANIC_STR "PANIC"
-extern void Panic(const char *message, ...)
-{
-
-    if (logger.color)
-    {
-        fprintf(stderr, "%s", ANSI_COLOR_RED);
-    }
-
-    // print log level
-    if (logger.log_type == STANDARD_FMT)
-    {
-        fprintf(stderr, "[%s] ", PANIC_STR);
-    }
-    else if (logger.log_type == JSON_FMT)
-    {
-        fprintf(stderr, "{\"level\": \"%s\", ", PANIC_STR);
-    }
-
-    // print timestamp
-    if (logger.timestamp)
-    {
-        time_t rawtime;
-        struct tm *time_info;
-        char timestamp[80];
-
-        time(&rawtime);
-        time_info = localtime(&rawtime);
-        strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", time_info);
-        if (logger.log_type == STANDARD_FMT)
-        {
-            fprintf(stderr, "[%s]", timestamp);
-        }
-        else if (logger.log_type == JSON_FMT)
-        {
-            fprintf(stderr, "\"timestamp\": \"%s\", ", timestamp);
-        }
-    }
-
-    if (logger.log_type == JSON_FMT)
-    {
-        fprintf(stderr, "\"message\": \"");
-    }
-    va_list args;
-    va_start(args, message);
-    vfprintf(stderr, message, args);
-    va_end(args);
-
-    if (logger.log_type == JSON_FMT)
-    {
-        fprintf(stderr, "\"}");
-    }
-
-    // print newline
-    if (logger.newline)
-    {
-        fprintf(stderr, "\n");
-    }
-
-    if (logger.color)
-    {
-        fprintf(stderr, "%s", ANSI_COLOR_RESET);
-    }
-
-    // flush, TODO research buffer
-    if (logger.flush)
-    {
-        fflush(stderr);
-    }
-
-    abort();
 }
