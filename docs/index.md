@@ -54,14 +54,15 @@ enum LogLevel
 
 The level of the log, the lower the number the higher the severity.
 
-| Value   | Description                                                                                             |
-| ------- | ------------------------------------------------------------------------------------------------------- |
-| `TRACE` | Most verbose log level.                                                                                 |
-| `DEBUG` | Diagnostic information used for troubleshooting and testing.                                            |
-| `INFO`  | Standard informational messages confirming that things are working as expected..                        |
-| `WARN`  | Indicates an unexpected or abnormal event that does not disrupt current application.                    |
-| `ERROR` | Used when a specific transaction or functionality fails, but the rest of the application stays running. |
-| `FATAL` | The highest and most severe level. It indicates a catastrophic failure that crashes the application.    |
+| Value   | Description                                                                                                                                     |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TRACE` | Most verbose log level.                                                                                                                         |
+| `DEBUG` | Diagnostic information used for troubleshooting and testing.                                                                                    |
+| `INFO`  | Standard informational messages confirming that things are working as expected..                                                                |
+| `WARN`  | Indicates an unexpected or abnormal event that does not disrupt current application.                                                            |
+| `ERROR` | Used when a specific transaction or functionality fails, but the rest of the application stays running.                                         |
+| `PANIC` | It indicates a unexpected failure. Will call `abort()` after logging.                                                                           |
+| `FATAL` | The highest and most severe level. It indicates a catastrophic failure that crashes the application. Will call `exit(EXIT_FAILURE)` afterwards. |
 
 ---
 

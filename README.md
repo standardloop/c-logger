@@ -22,6 +22,7 @@ It supports:
   - `INFO`
   - `WARN`
   - `ERROR`
+  - `PANIC`
   - `FATAL`
 - Color Output
 
@@ -47,4 +48,4 @@ int main(void)
 
 Docs are generated a first generated with `doxygen` as `xml` and then `moxygen` reads the xml to output markdown in the `docs/` folder.
 
-This repo uses reusable tasks from https://github.com/standardloop/taskfiles/blob/main/c.yml
+This repo uses reusable tasks from https://github.com/standardloop/taskfiles/
