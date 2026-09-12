@@ -123,6 +123,10 @@ tasks:
       - leaks --atExit -- ./{{.LAB_EXECUTABLE_NAME}}
       - rm libstandardloop-logger.dylib
 
+  fmt:
+    deps:
+      - c:fmt
+
   docs:
     deps:
       - c:docs:moxygen # from import
