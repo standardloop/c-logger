@@ -4,7 +4,7 @@ version: "3"
 silent: true
 
 includes:
-  c: "{{if .CI }}https://raw.githubusercontent.com/standardloop/taskfiles/refs/heads/main/c.yml{{else}}../taskfiles/c.yml{{end}}"
+  c: https://raw.githubusercontent.com/standardloop/taskfiles/refs/heads/main/c.yml #../taskfiles/c.yml"
 
 vars:
   SOURCE_FILES:
