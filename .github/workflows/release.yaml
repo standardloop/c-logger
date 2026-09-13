@@ -40,7 +40,7 @@ jobs:
         env:
           GH_RELEASE_VERSION: ${{ steps.clean_tag.outputs.version }}
         run: |
-          task release:build
+          task release
 
       - name: Archive dylib
         run: |

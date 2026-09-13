@@ -60,3 +60,4 @@ tmp/
 logger
 .task
 doxygen
+test

@@ -3,86 +3,42 @@ version: "3"
 
 silent: true
 
+includes:
+  # c: https://raw.githubusercontent.com/standardloop/taskfiles/refs/heads/main/c.yml # can pin in future
+  c: ../taskfiles/c.yml
+
 vars:
-  CC: clang
-  CC_FLAGS: "-Werror -Wextra -Wall -Wfree-nonheap-object -std=c17"
-  LAB_EXECUTABLE_NAME: lab
   SOURCE_FILES:
     - logger.c
+  TEST_SOURCE_FILES:
+    - logger.test.c
   DYLIB_NAME: libstandardloop-logger.dylib
-  DYLIB_PATH: /usr/local/lib/standardloop/
-  DYLIB_INCLUDE_PATH: /usr/local/include/standardloop/
-
-includes:
-  c: https://raw.githubusercontent.com/standardloop/taskfiles/refs/heads/main/c.yml # can pin in future
 
 tasks:
   default:
-    deps:
-      - lab
-
-  release:
-    deps:
-      - release:build
-      - release:move-files
+    silent: true
+    desc: "Show all avaiable tasks."
+    cmds:
+      - task --list-all
 
   # GH_RELEASE_VERSION is set by CI
-  release:build:
-    run: once
-    cmds:
-      - |
-        {{.CC}} {{.CC_FLAGS}} \
-        {{range .SOURCE_FILES}} {{.}} {{end}} \
-        -O3 \
-        -dynamiclib \
-        -current_version {{.GH_RELEASE_VERSION}} \
-        -compatibility_version {{.GH_RELEASE_VERSION}} \
-        -o {{.DYLIB_NAME}}
-    sources:
-      - "*.c"
-    generates:
-      - "{{.DYLIB_NAME}}"
-
-  release:move-files:
+  release:
     deps:
-      - release:build
-    cmds:
-      - sudo -v
-      - sudo cp {{.DYLIB_NAME}} {{.DYLIB_PATH}}
-      - sudo cp logger.h {{.DYLIB_INCLUDE_PATH}}
+      - c:release
 
-  lab:
+  test:
     deps:
-      - lab:run
+      - test:run
 
-  lab:build:
-    run: once
+  test:build:
     cmds:
-      - |
-        {{.CC}} {{.CC_FLAGS}} \
-        lab.c \
-        {{range .SOURCE_FILES}} {{.}} {{end}} \
-        -L/usr/local/lib/standardloop \
-        -lstandardloop-logger \
-        -o {{.LAB_EXECUTABLE_NAME}}
-    sources:
-      - "*.c"
-    generates:
-      - "{{.LAB_EXECUTABLE_NAME}}"
+      - task: c:test:build
 
-  lab:run:
+  test:run:
     deps:
-      - lab:build
+      - test:build
     cmds:
-      - ./{{.LAB_EXECUTABLE_NAME}}
-
-  lab:leaks:
-    deps:
-      - lab:build
-    cmds:
-      - cp /usr/local/lib/standardloop/libstandardloop-logger.dylib ./ # to get around sips we need to move dylibs to local dir
-      - leaks --atExit -- ./{{.LAB_EXECUTABLE_NAME}}
-      - rm libstandardloop-logger.dylib
+      - ./{{.TEST_EXECUTABLE_NAME}}
 
   fmt:
     deps:
