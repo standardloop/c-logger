@@ -13,6 +13,7 @@ jobs:
       DYLIB_NAME: "libstandardloop-logger.dylib"
       HEADER_NAME: "logger.h"
       ZIP_NAME: "libstandardloop-logger.zip"
+      CI: true
 
     steps:
       - name: Checkout repository

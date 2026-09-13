@@ -4,8 +4,7 @@ version: "3"
 silent: true
 
 includes:
-  c: https://raw.githubusercontent.com/standardloop/taskfiles/refs/heads/main/c.yml # can pin in future
-  # c: ../taskfiles/c.yml
+  c: "{{if .CI }}https://raw.githubusercontent.com/standardloop/taskfiles/refs/heads/main/c.yml{{else}}../taskfiles/c.yml{{end}}"
 
 vars:
   SOURCE_FILES:
@@ -40,6 +39,10 @@ tasks:
       - test:build
     cmds:
       - ./{{.TEST_EXECUTABLE_NAME}}
+
+  clean:
+    deps:
+      - c:test:clean
 
   fmt:
     deps:
