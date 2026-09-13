@@ -13,6 +13,7 @@ vars:
   TEST_SOURCE_FILES:
     - logger.test.c
   DYLIB_NAME: libstandardloop-logger.dylib
+  DYLIB_HEADER: logger.h
 
 tasks:
   default:
