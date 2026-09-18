@@ -12,26 +12,16 @@
  */
 typedef struct
 {
-    /** The log level. */
-    enum LogLevel log_level;
-    /** The log type. */
-    enum LogType log_type;
-    /** Should the logger output timestamps. */
-    bool timestamp;
-    /** Should the logger call flush after outputting. */
-    bool flush;
-    /** Should the logger add a newline to messages. */
-    bool newline;
-    /** Should the logger output in color. */
-    bool color;
+    struct LoggerOptions options;
 } Logger;
 
-static Logger logger = {.log_level = FATAL,
-                        .log_type = JSON_FMT,
-                        .timestamp = true,
-                        .flush = false,
-                        .newline = true,
-                        .color = false};
+static Logger logger = {.options = {.log_level = TRACE,
+                                    .log_type = STANDARD_FMT,
+                                    .timestamp = true,
+                                    .flush = true,
+                                    .newline = true,
+                                    .color = true,
+                                    .display_level = true}};
 
 // log colors - START
 enum logColor
@@ -59,30 +49,42 @@ static char *logTypeToString(enum LogType);
 
 // log colors - END
 
-extern void InitLogger(enum LogLevel level, enum LogType type, bool timestamp,
-                       bool flush, bool newline, bool color)
+extern void InitLogger(struct LoggerOptions options)
 {
-    SetLogLevel(level);
-    logger.log_type = type;
-    logger.timestamp = timestamp;
-    logger.flush = flush;
-    logger.newline = newline;
-    logger.color = color;
+    SetLogLevel(options.log_level);
+    logger.options.log_type = options.log_type;
+    logger.options.timestamp = options.timestamp;
+    logger.options.flush = options.flush;
+    logger.options.newline = options.newline;
+    logger.options.color = options.color;
+    logger.options.display_level = options.display_level;
 }
 
 extern void InitLoggerEasy(enum LogLevel level)
 {
-    InitLogger(level, JSON_FMT, true, false, true, false);
+    // all default except for level
+
+    struct LoggerOptions options = {.log_level = level,
+                                    .log_type = STANDARD_FMT,
+                                    .timestamp = true,
+                                    .flush = true,
+                                    .newline = true,
+                                    .color = true,
+                                    .display_level = true};
+    InitLogger(options);
 }
 
 extern void PrintLoggerConfig(void)
 {
-    printf("Level: %s\n", LogLevelToString(logger.log_level));
-    printf("Type: %s\n", logTypeToString(logger.log_type));
-    printf("Timestamp enabled: %s\n", logger.timestamp ? "TRUE" : "FALSE");
-    printf("Flush enabled: %s\n", logger.flush ? "TRUE" : "FALSE");
-    printf("Newline enabled: %s\n", logger.newline ? "TRUE" : "FALSE");
-    printf("Color enabled: %s\n", logger.color ? "TRUE" : "FALSE");
+    printf("Level: %s\n", LogLevelToString(logger.options.log_level));
+    printf("Type: %s\n", logTypeToString(logger.options.log_type));
+    printf("Timestamp enabled: %s\n",
+           logger.options.timestamp ? "TRUE" : "FALSE");
+    printf("Flush enabled: %s\n", logger.options.flush ? "TRUE" : "FALSE");
+    printf("Newline enabled: %s\n", logger.options.newline ? "TRUE" : "FALSE");
+    printf("Color enabled: %s\n", logger.options.color ? "TRUE" : "FALSE");
+    printf("Print Level: %s\n",
+           logger.options.display_level ? "TRUE" : "FALSE");
 }
 
 static char *logTypeToString(enum LogType type)
@@ -134,12 +136,12 @@ extern enum LogLevel StringToLogLevel(const char *input_str)
 
 extern void SetLogLevel(enum LogLevel level)
 {
-    logger.log_level = level;
+    logger.options.log_level = level;
 }
 
 extern enum LogLevel GetLogLevel()
 {
-    return logger.log_level;
+    return logger.options.log_level;
 }
 
 static enum logColor logLevelToColor(enum LogLevel level)
@@ -217,30 +219,40 @@ extern void Log(enum LogLevel level, const char *message, ...)
     // memset(buff, '\0', sizeof(buff));
     // setvbuf(stdout, buff, _IOFBF, 1024);
 
-    if (level > logger.log_level)
+    if (level > logger.options.log_level)
     {
         return;
     }
 
     const char *ll_string = LogLevelToString(level);
 
-    if (logger.color)
+    if (logger.options.color)
     {
         fprintf(stderr, "%s", logColorToANSICode(logLevelToColor(level)));
     }
 
     // print log level
-    if (logger.log_type == STANDARD_FMT)
+    if (logger.options.log_type == STANDARD_FMT)
     {
-        fprintf(stderr, "[%s] ", ll_string);
+        if (logger.options.display_level)
+        {
+            fprintf(stderr, "[%s] ", ll_string);
+        }
     }
-    else if (logger.log_type == JSON_FMT)
+    else if (logger.options.log_type == JSON_FMT)
     {
-        fprintf(stderr, "{\"level\": \"%s\", ", ll_string);
+        if (logger.options.display_level)
+        {
+            fprintf(stderr, "{\"level\": \"%s\", ", ll_string);
+        }
+        else
+        {
+            fprintf(stderr, "{");
+        }
     }
 
     // print timestamp
-    if (logger.timestamp)
+    if (logger.options.timestamp)
     {
         time_t rawtime;
         struct tm *time_info;
@@ -249,17 +261,17 @@ extern void Log(enum LogLevel level, const char *message, ...)
         time(&rawtime);
         time_info = localtime(&rawtime);
         strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", time_info);
-        if (logger.log_type == STANDARD_FMT)
+        if (logger.options.log_type == STANDARD_FMT)
         {
-            fprintf(stderr, "[%s]", timestamp);
+            fprintf(stderr, "[%s] ", timestamp);
         }
-        else if (logger.log_type == JSON_FMT)
+        else if (logger.options.log_type == JSON_FMT)
         {
             fprintf(stderr, "\"timestamp\": \"%s\", ", timestamp);
         }
     }
 
-    if (logger.log_type == JSON_FMT)
+    if (logger.options.log_type == JSON_FMT)
     {
         fprintf(stderr, "\"message\": \"");
     }
@@ -268,24 +280,24 @@ extern void Log(enum LogLevel level, const char *message, ...)
     vfprintf(stderr, message, args);
     va_end(args);
 
-    if (logger.log_type == JSON_FMT)
+    if (logger.options.log_type == JSON_FMT)
     {
         fprintf(stderr, "\"}");
     }
 
     // print newline
-    if (logger.newline)
+    if (logger.options.newline)
     {
         fprintf(stderr, "\n");
     }
 
-    if (logger.color)
+    if (logger.options.color)
     {
         fprintf(stderr, "%s", ANSI_COLOR_RESET);
     }
 
     // flush, TODO research buffer
-    if (logger.flush)
+    if (logger.options.flush)
     {
         fflush(stderr);
     }

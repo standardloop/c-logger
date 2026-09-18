@@ -6,20 +6,28 @@
 
 int main(void)
 {
-    // InitLoggerEasy(StringToLogLevel("TRACE"));
-    // SetLogLevel(StringToLogLevel("TRACE"));
-    // Log(TRACE, "hello %s", "world");
-    // printf("%s\n", LogLevelToString(GetLogLevel()));
-    InitLogger(TRACE, STANDARD_FMT, false, true, true, true);
+
+    struct LoggerOptions options = {.log_level = TRACE,
+                                    .log_type = STANDARD_FMT,
+                                    .timestamp = true,
+                                    .flush = true,
+                                    .newline = true,
+                                    .color = true,
+                                    .display_level = true};
+    InitLogger(options);
     PrintLoggerConfig();
 
-    InitLogger(TRACE, STANDARD_FMT, false, true, true, true);
-    Log(TRACE, "hello %s", "world");
-    // Log(INFO, "hello %s", "world");
-    // Log(DEBUG, "hello %s", "world");
-    // Log(WARN, "hello %s", "world");
-    // Log(ERROR, "hello %s", "world");
-    // // Log(FATAL, "hello %s", "world");
-    // Panic("test");
+    Log(TRACE, "testing");
+
+    struct LoggerOptions options_again = {.log_level = TRACE,
+                                          .log_type = JSON_FMT,
+                                          .timestamp = false,
+                                          .flush = true,
+                                          .newline = true,
+                                          .color = true,
+                                          .display_level = false};
+    InitLogger(options_again);
+    Log(TRACE, "testing");
+
     return EXIT_SUCCESS;
 }

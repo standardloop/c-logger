@@ -51,17 +51,29 @@ enum LogType
     JSON_FMT = 1
 };
 
+struct LoggerOptions
+{
+    /** level The log level from the LogLevel enum. */
+    enum LogLevel log_level;
+    /** The log type from the LogType enum.  */
+    enum LogType log_type;
+    /**  Turn on or off timestamps in logs.  */
+    bool timestamp;
+    /**  If true, fflush(stderr) will be called.  */
+    bool flush;
+    /**  If true, a newline will be inserted.  */
+    bool newline;
+    /**  If true, color output will be enabled.  */
+    bool color;
+    /** If true, the log level will be logged.  */
+    bool display_level;
+};
+
 /**
  * @brief Initializes the Logger.
- * @param level The log level from the LogLevel enum.
- * @param type The log type from the LogType enum.
- * @param timestamp Turn on or off timestamps in logs.
- * @param flush If true, fflush(stderr) will be called.
- * @param newline If true, a newline will be inserted.
- * @param color If true, color output will be enabled.
+ * @param options The LoggerOptions.
  */
-extern void InitLogger(enum LogLevel level, enum LogType type, bool timestamp,
-                       bool flush, bool newline, bool color);
+extern void InitLogger(struct LoggerOptions options);
 
 /**
  * @brief Initializes the Logger the easy way — more defaults.

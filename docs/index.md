@@ -1,5 +1,11 @@
 # API Reference
 
+## Classes
+
+| Name                              | Description |
+| --------------------------------- | ----------- |
+| [`LoggerOptions`](#loggeroptions) |             |
+
 ## Enumerations
 
 ---
@@ -44,21 +50,16 @@ How log outputs should look, standard or JSON.
 ### InitLogger
 
 ```cpp
-void InitLogger(enum LogLevel level, enum LogType type, bool timestamp, bool flush, bool newline, bool color)
+void InitLogger(struct LoggerOptions options)
 ```
 
 Initializes the Logger.
 
 #### Parameters
 
-| Parameter   | Type                         | Description                                        |
-| ----------- | ---------------------------- | -------------------------------------------------- |
-| `level`     | enum [`LogLevel`](#loglevel) | The log level from the [LogLevel](#loglevel) enum. |
-| `type`      | enum [`LogType`](#logtype)   | The log type from the [LogType](#logtype) enum.    |
-| `timestamp` | `bool`                       | Turn on or off timestamps in logs.                 |
-| `flush`     | `bool`                       | If true, fflush(stderr) will be called.            |
-| `newline`   | `bool`                       | If true, a newline will be inserted.               |
-| `color`     | `bool`                       | If true, color output will be enabled.             |
+| Parameter | Type                   | Description        |
+| --------- | ---------------------- | ------------------ |
+| `options` | `struct LoggerOptions` | The LoggerOptions. |
 
 ---
 
@@ -188,3 +189,95 @@ The current log level as an string value.
 | Parameter | Type                         | Description                             |
 | --------- | ---------------------------- | --------------------------------------- |
 | `level`   | enum [`LogLevel`](#loglevel) | The desired log level as an enum value. |
+
+## LoggerOptions
+
+```cpp
+struct LoggerOptions
+```
+
+### Public Attributes
+
+| Return                       | Name                              | Description                                              |
+| ---------------------------- | --------------------------------- | -------------------------------------------------------- |
+| enum [`LogLevel`](#loglevel) | [`log_level`](#log_level)         | level The log level from the [LogLevel](#loglevel) enum. |
+| enum [`LogType`](#logtype)   | [`log_type`](#log_type)           | The log type from the [LogType](#logtype) enum.          |
+| `bool`                       | [`timestamp`](#timestamp)         | Turn on or off timestamps in logs.                       |
+| `bool`                       | [`flush`](#flush)                 | If true, fflush(stderr) will be called.                  |
+| `bool`                       | [`newline`](#newline)             | If true, a newline will be inserted.                     |
+| `bool`                       | [`color`](#color)                 | If true, color output will be enabled.                   |
+| `bool`                       | [`display_level`](#display_level) | If true, the log level will be logged.                   |
+
+---
+
+#### log_level
+
+```cpp
+enum LogLevel log_level
+```
+
+Type: enum [`LogLevel`](#loglevel)
+
+level The log level from the [LogLevel](#loglevel) enum.
+
+---
+
+#### log_type
+
+```cpp
+enum LogType log_type
+```
+
+Type: enum [`LogType`](#logtype)
+
+The log type from the [LogType](#logtype) enum.
+
+---
+
+#### timestamp
+
+```cpp
+bool timestamp
+```
+
+Turn on or off timestamps in logs.
+
+---
+
+#### flush
+
+```cpp
+bool flush
+```
+
+If true, fflush(stderr) will be called.
+
+---
+
+#### newline
+
+```cpp
+bool newline
+```
+
+If true, a newline will be inserted.
+
+---
+
+#### color
+
+```cpp
+bool color
+```
+
+If true, color output will be enabled.
+
+---
+
+#### display_level
+
+```cpp
+bool display_level
+```
+
+If true, the log level will be logged.
