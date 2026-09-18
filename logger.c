@@ -150,9 +150,8 @@ static enum logColor logLevelToColor(enum LogLevel level)
     {
     case PANIC:
     case FATAL:
-        return LC_RED;
     case ERROR:
-        return LC_MAGENTA;
+        return LC_RED;
     case WARN:
         return LC_YELLOW;
     case DEBUG:
@@ -162,7 +161,7 @@ static enum logColor logLevelToColor(enum LogLevel level)
     case TRACE:
         return LC_CYAN;
     default:
-        return LC_CYAN;
+        return LC_MAGENTA;
     }
 }
 
