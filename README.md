@@ -44,6 +44,24 @@ int main(void)
 }
 ```
 
+## Available Tasks
+
+<!-- TASKS_START -->
+
+```sh
+task: Available tasks for this project:
+* default      Show all avaiable tasks.
+* release
+* test
+* test:build
+* test:run
+* clean
+* fmt
+* docs
+```
+
+<!-- TASKS_END -->
+
 ## Docs
 
 Docs are generated a first generated with `doxygen` as `xml` and then `moxygen` reads the xml to output markdown in the `docs/` folder.
